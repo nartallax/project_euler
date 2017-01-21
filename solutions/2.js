@@ -1,0 +1,1 @@
+solution(algo.fibonacci().takeWhile(x => x <= 4000000).filter(x => x % 2 === 0).sum());

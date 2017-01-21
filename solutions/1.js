@@ -1,0 +1,1 @@
+solution(nums(3, 1000 - 1, 3).filter(a => a % 5).add(nums(5, 1000 - 1, 5)).sum());

@@ -1,0 +1,1 @@
+solution(algo.primes().drop(10000).take());
