@@ -27,13 +27,16 @@ Stream.prototype = {
 		}, () => takeNext())
 	},
 	
-	each: function(proc){ while(this.hasNext()) proc(this.next()) },
+	each: function(proc, index){ index = index || 0; while(this.hasNext()) proc(this.next(), index++) },
 	reduce: function(proc, value){ return this.each(x => value = proc(value, x)), value },
 	array: function(arr){ return this.reduce((arr, x) => (arr.push(x), arr), arr || []) },
 	
 	zipWithIndex: function(i){ return (i = (i || 0)), new Stream(this.hasNext, () => [i += 1, this.next()]) },
 	sum: function(){ return this.reduce((a, b) => a + b, 0) },
 	product: function(){ return this.reduce((a, b) => a * b, 1) },
+	max: function(){ return this.reduce((a, b) => a > b? a: b, 0) },
+	min: function(){ return this.reduce((a, b) => a < b? a: b, 0) },
+	
 	add: function(otherStream){ 
 		var next = () => this.next(),
 			hasNext = () => this.hasNext()? true: ((next = () => otherStream.next()), (hasNext = () => otherStream.hasNext()))();
