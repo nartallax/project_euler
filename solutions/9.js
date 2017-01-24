@@ -8,8 +8,7 @@
 // x (2P - 2y) = P2 - 2Py
 // x = (P2 - 2Py) / 2(P - y) = P (P - 2y) / 2(P - y)
 
-var perimeter = 1000,
-	p2 = perimeter * perimeter;
+var perimeter = 1000;
 
 var biggerSideOf = y => perimeter * (perimeter - (y * 2)) / (2 * (perimeter - y)),
 	lowerSide = nums(1, perimeter/2).find(y => biggerSideOf(y) % 1 === 0),
