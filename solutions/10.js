@@ -1,0 +1,1 @@
+solution(algo.primes(2000000).sum());

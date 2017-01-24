@@ -12,19 +12,20 @@ var Stream = function(hasNext, next){
 }
 
 Stream.prototype = {
-	map: function(proc){ return new Stream(this.hasNext, () => proc(this.next())) },
+	map: function(proc){ return new Stream(() => this.hasNext(), () => proc(this.next())) },
 	filter: function(proc){
 		var next, nextIsLoaded = false;
 		var loadNext = () => nextIsLoaded? true: this.hasNext()? ((next = this.next()), nextIsLoaded = true): false,
-			takeNext = () => (loadNext(), (nextIsLoaded = false), next);
-		
-		return new Stream(() => {
-			while(loadNext()) {
-				if(proc(next)) return true;
-				takeNext();
+			takeNext = () => (loadNext(), (nextIsLoaded = false), next),
+			loadNextApplicable = () => {
+				while(loadNext()) {
+					if(proc(next)) return true;
+					takeNext();
+				}
+				return false;
 			}
-			return false;
-		}, () => takeNext())
+		
+		return new Stream(loadNextApplicable, () => loadNextApplicable()? takeNext(): undefined)
 	},
 	
 	each: function(proc, index){ index = index || 0; while(this.hasNext()) proc(this.next(), index++) },
@@ -49,7 +50,7 @@ Stream.prototype = {
 			return this.hasNext()? this.next(): undefined;
 		} else {
 			var i = 0;
-			return new Stream(() => i < count, () => (i++, this.next()));
+			return new Stream(() => this.hasNext() && (i < count), () => (i++, this.next()));
 		}
 	},
 	takeWhile: function(cond){
