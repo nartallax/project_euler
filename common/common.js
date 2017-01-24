@@ -6,6 +6,7 @@ Array.prototype.stream = function(){
 }
 
 global.Stream = require('./stream.js');
+global.TransactionalStream = require('./transactional_stream.js');
 global.log = require('./log.js');
 global.solution = v => {
 	console.log(v);
