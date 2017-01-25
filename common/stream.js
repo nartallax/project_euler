@@ -12,7 +12,17 @@ var Stream = function(hasNext, next){
 }
 
 Stream.prototype = {
+	stream: function(){ return this },
+	
 	map: function(proc){ return new Stream(() => this.hasNext(), () => proc(this.next())) },
+	flatMap: function(proc){
+		var buffer = [].stream();
+		return new Stream(
+			() => buffer.hasNext() || this.hasNext(),
+			() => buffer.hasNext()? buffer.next(): (buffer = proc(this.next()).stream()).next()
+		);
+	},
+	flatten: function(){ return this.flatMap(x => x) },
 	filter: function(proc){
 		var next, nextIsLoaded = false;
 		var loadNext = () => nextIsLoaded? true: this.hasNext()? ((next = this.next()), nextIsLoaded = true): false,
