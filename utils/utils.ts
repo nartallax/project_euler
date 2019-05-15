@@ -1,11 +1,11 @@
-/** generate primes that are within [0, maxTotalCount] */
-export function* primes(maxTotalCount: number){
+/** generate primes that are within [0, upperValueBound] */
+export function* primes(upperValueBound: number){
 
 	let known = new Set<number>();
 
-	for(let i = 2; i < maxTotalCount; i++){
+	for(let i = 2; i < upperValueBound; i++){
 		if(!known.has(i)){
-			for(let j = 1; j < maxTotalCount / i; j++){
+			for(let j = 1; j < upperValueBound / i; j++){
 				known.add(j * i);
 			}
 			yield i;
